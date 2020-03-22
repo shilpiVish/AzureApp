@@ -49,7 +49,6 @@ namespace AzureFunctionApp
            
            foreach(var item in accountdata)
             {
-               
                 if (item != null)
                 {
                     try
@@ -63,17 +62,31 @@ namespace AzureFunctionApp
                         return false;
                     }
                 }
-                
             }
             return false;
             // Adding body content in HTTP request 
-
         }
         public static List<Employee> GetEmployees()
         {
             List<Employee> emp = new List<Employee>();
             DataTable dt = new DataTable();
+            //        CloudStorageAccount storageAccount = CloudStorageAccount.Parse(
+            //CloudConfigurationManager.GetSetting("StorageConnectionString"));
 
+            //        // Create the blob client.
+            //        CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+
+            //        // Retrieve reference to a previously created container.
+            //        CloudBlobContainer container = blobClient.GetContainerReference("files");
+
+            //        // Retrieve reference to a blob named "imex.xlsx".
+            //        CloudBlockBlob blockBlob = container.GetBlockBlobReference("book.xlsx");
+
+            //        // Save blob contents to a file.
+            //        //using (var fileStream = System.IO.File.OpenWrite(@"path\myfile"))
+            //        //{
+            //        //    blockBlob.DownloadToStream(fileStream);
+            //        //}
             using (XLWorkbook workBook = new XLWorkbook(@"C:\Users\akumar3\Documents\Book1.xlsx"))
             {
                 //Read the first Sheet from Excel file.
@@ -114,7 +127,6 @@ namespace AzureFunctionApp
             }
             return emp;
         }
-
     }
     public class parameters
     {
