@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -11,14 +11,12 @@ using System.Net.Http;
 using System.Text;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using System.Collections.Generic;
-using System.Collections.Generic;
-using System.Text;
 
 namespace AzureFunctionApp
 {
     public static class SendMail
     {
-        [FunctionName("Function1")]
+        [FunctionName("SendMail")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
@@ -28,8 +26,6 @@ namespace AzureFunctionApp
             string name = "0b06fdda-0458-ea11-a811-000d3a0a7552";// req.Query["name"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-
-
 
             // Acquiring Access Token  
             var accessToken = await AccessTokenGenerator();
@@ -46,28 +42,19 @@ namespace AzureFunctionApp
             accountdata.accountid = "0b06fdda-0458-ea11-a811-000d3a0a7552";// data.PrimaryEntityId;
             accountdata.odataType = "Microsoft.Dynamics.CRM.account";
 
-            Parameter p = new Parameter();
+            parameter p = new parameter();
             p.Account = accountdata;
 
             // OData related headers  
             message.Headers.Add("OData-MaxVersion", "4.0");
             message.Headers.Add("OData-Version", "4.0");
             message.Headers.Add("Prefer", "odata.include-annotations=\"*\"");
-            // message.Headers.Add("Accept", "application/json");
-            //  message.Headers.Add("Content-Type", "application/json; charset=utf-8");
-            // message.Content= new StringContent(record);
-            // Passing AccessToken in Authentication header  
             message.Headers.Add("Authorization", $"Bearer {accessToken}");
 
             // Adding body content in HTTP request   
             if (p != null)
                 message.Content = new StringContent(JsonConvert.SerializeObject(p), UnicodeEncoding.UTF8, "application/json");
             var response = await client.SendAsync(message);
-            // return await client.SendAsync(message);
-            //string responseMessage = string.IsNullOrEmpty(name)
-            //    ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-            //    : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
             return new OkObjectResult(response.Content.ReadAsStringAsync().Result);
         }
 
@@ -85,7 +72,7 @@ namespace AzureFunctionApp
         }
 
     }
-    public class Parameter
+    public class parameter
     {
         public object Account { get; set; }
     }
@@ -130,6 +117,3 @@ namespace AzureFunctionApp
     }
 
 }
-
-
-
